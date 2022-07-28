@@ -1,7 +1,7 @@
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const User = require("../models/userModel");
-
+const sendToken = require("../utils/jwtToken")
 ///registering a user;
 
 exports.registerUser = catchAsyncErrors(async(req,res,next)=>{
@@ -12,16 +12,8 @@ exports.registerUser = catchAsyncErrors(async(req,res,next)=>{
             public_id : "This is a sample id",
             url : "sample_url"
         }
-
-
-        
     })
-
-    let token = user.getJWTToken();
-    res.status(201).json({
-        success:true,
-        token
-    })
+    sendToken(user,201,res);
     
 })
 //login user
@@ -42,10 +34,6 @@ exports.loginUser = catchAsyncErrors(async(req,res,next)=>{
     if(!isPasswordMatched ){
         return next(new ErrorHandler("Invalid email or password",401));
     }
-    let token = user.getJWTToken();
-    res.status(200).json({
-        success:true,
-        token
-    })
+    sendToken(user,200,res);
 
 })
