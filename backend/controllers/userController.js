@@ -1,6 +1,7 @@
 const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const User = require("../models/userModel");
+const Product = require("../models/productModel")
 const sendToken = require("../utils/jwtToken")
 const sendEmail = require("../utils/sendEmail.js")
 const crypto = require("crypto");
@@ -146,7 +147,7 @@ exports.updatePassword = catchAsyncErrors(async(req,res,next)=>{
 
     sendToken(user,200,res);
 })
-
+//update user profile
 exports.updateUserProfile = catchAsyncErrors(async(req,res,next)=>{
     const newUserData = {
         name : req.body.name,
@@ -163,5 +164,105 @@ exports.updateUserProfile = catchAsyncErrors(async(req,res,next)=>{
    res.status(200).json({
     success:true,
    })
+})
+
+
+//get all users(admin)
+exports.getAllUser = catchAsyncErrors(async(req,res,next)=>{
+    const users = await User.find();
+
+    res.status(200).json({
+        success:true,
+        users
+       })
+})
+
+
+//get single users(admin)
+exports.getSingleUser = catchAsyncErrors(async(req,res,next)=>{
+    const user = await User.findById(req.params.id);
+if(!user){
+    return next(new ErrorHandler(`User doesn't exist with id:${req.params.id}`))
+}
+    res.status(200).json({
+        success:true,
+        user
+       })
+})
+
+//update user role--admin
+
+exports.updateUserRole = catchAsyncErrors(async(req,res,next)=>{
+    const newUserData = {
+        name : req.body.name,
+        email : req.body.email,
+        role: req.body.role,
+    }
+
+    await User.findByIdAndUpdate(req.params.id,newUserData,{
+        new:true,
+        runValidators:true,
+        useFindAndModify:false
+    })
+    
+   res.status(200).json({
+    success:true,
+   })
+})
+
+//delete user -- admin
+
+exports.deleteUser = catchAsyncErrors(async(req,res,next)=>{
+    let user = await User.findById(req.params.id);
+    if(!user){
+        return next(new ErrorHandler(`User does not exist with ID :${req.params.id}`))
+    }
+
+    await user.remove();
+   res.status(200).json({
+    success:true,
+    message:"User deleted successfully"
+   })
+})
+
+
+//create new review or update the existing review
+exports.createProductReview = catchAsyncErrors(async(req,res,next)=>{
+
+    const {rating,comment,productId} = req.body;
+    const review = {
+        user:req.user._id,
+        name:req.user.name,
+        rating:Number(rating),
+        comment
+    }
+
+    const product = await Product.findById(productId);
+    const isReviewed = product.reviews.find(rev=>rev.user.toString()===req.user._id.toString());
+    if(isReviewed){
+        product.reviews.forEach((rev=>{
+            if(rev=>rev.user.toString()===req.user._id.toString())
+            rev.rating = rating,
+            rev.comment = comment
+        }))
+    }
+    else{
+        product.reviews.push(review)
+        product.numOfReviews = product.reviews.length
+    }
+
+    let avg = 0;
+    product.reviews.forEach(rev=>{
+        avg+=rev.rating
+    })
+
+    product.ratings = avg/product.reviews.length;
+
+    await product.save({validateBeforeSave:false})
+
+    res.status(200).json({
+        success:true,
+       })
+
 })
 
