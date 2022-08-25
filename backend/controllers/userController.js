@@ -5,12 +5,12 @@ const Product = require("../models/productModel")
 const sendToken = require("../utils/jwtToken")
 const sendEmail = require("../utils/sendEmail.js")
 const crypto = require("crypto");
-///registering a user;
+///registering a user; 
 
 exports.registerUser = catchAsyncErrors(async(req,res,next)=>{
-    let {name,email,password} = req.body;
+    let {name,email,password,phoneNo,city} = req.body;
     let user = await User.create({
-        name,email,password,
+        name,email,password,phoneNo,city,
         avatar:{
             public_id : "This is a sample id",
             url : "sample_url"
@@ -264,5 +264,30 @@ exports.createProductReview = catchAsyncErrors(async(req,res,next)=>{
         success:true,
        })
 
+})
+
+//get all shgs
+exports.getSHGs = catchAsyncErrors(async(req,res,next)=>{
+
+    const users = await User.find({"role":"shg-admin"});
+
+    res.status(200).json({
+        success:true,
+        users
+       })
+
+   
+})
+
+exports.getSHGsByLocation = catchAsyncErrors(async(req,res,next)=>{
+    // const user = await User.findById(req.params.city);
+    const users = await User.find({"role":"shg-admin","city":req.params.city});
+
+    res.status(200).json({
+        success:true,
+        users
+       })
+
+   
 })
 

@@ -17,11 +17,20 @@ let userSchema = new mongoose.Schema({
         unique:true,
         validate:[validator.isEmail,"Please enter a valid Email"]
     },
+    phoneNo:{ //phone no has been added
+        type:String,
+        unique:true,
+        required:[true,"Please enter your phone number so we can reach you"]
+    },
     password:{
         type:String,
         required:[true,"Please enter your password"],
         minLength:[8,"Name shoud have more than 8 characters"],
         select:false
+    },
+    city:{
+        type:String,
+        required:[true,"Please enter your city"]
     },
     avatar:{
             public_id:{

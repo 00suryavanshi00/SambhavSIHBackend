@@ -19,6 +19,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.5",
     "nodemailer": "^6.7.7",
+    "twilio": "^3.80.1",
     "validator": "^13.7.0"
   }
 }
