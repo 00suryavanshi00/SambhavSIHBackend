@@ -8,9 +8,9 @@ const crypto = require("crypto");
 ///registering a user; 
 
 exports.registerUser = catchAsyncErrors(async(req,res,next)=>{
-    let {name,email,password,phoneNo,city,shgId} = req.body;
+    let {name,email,password,phoneNo,city,shgId,role} = req.body;
     let user = await User.create({
-        name,email,password,phoneNo,city,shgId,
+        name,email,password,phoneNo,city,shgId,role,
         avatar:{
             public_id : "This is a sample id",
             url : "sample_url"
