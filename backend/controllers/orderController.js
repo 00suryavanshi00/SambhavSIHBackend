@@ -3,7 +3,8 @@ const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Product = require("../models/productModel");
 const accountSid = 'ACef8ea207139843e8e94bcfa5d3339790'; 
-const authToken = '65d24dba85e0f3fa150fb471d72cd734'; 
+// const authToken = '65d24dba85e0f3fa150fb471d72cd734'; 
+const authToken = '19e824ae39e6e05f6836c9ba202287bc'; 
 const client = require('twilio')(accountSid, authToken); 
 
 

@@ -28,6 +28,11 @@ let userSchema = new mongoose.Schema({
         minLength:[8,"Name shoud have more than 8 characters"],
         select:false
     },
+    shgId:{
+        type:String,
+        default:null,
+        required:[false]
+    },
     city:{
         type:String,
         required:[true,"Please enter your city"]
