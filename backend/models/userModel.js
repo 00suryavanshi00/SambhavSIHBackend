@@ -11,6 +11,11 @@ let userSchema = new mongoose.Schema({
         maxLength:[30,"Name cannot cannot 30 characters"],
         minLength:[4,"Name shoud have more than 5 characters"]
     },
+    noOfMembers:{
+        type:Number,
+        default:1,
+        required:false
+    },
     email:{
         type:String,
         required:[true,"Please enter your name"],
@@ -33,9 +38,18 @@ let userSchema = new mongoose.Schema({
         default:null,
         required:[false]
     },
+    aadharNumber:{
+        type:String,
+        required:[false],
+    },
     city:{
         type:String,
         required:[true,"Please enter your city"]
+    },
+    requested:{
+        type:Boolean,
+        required:[false],
+        default:false
     },
     avatar:{
             public_id:{

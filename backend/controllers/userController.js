@@ -8,9 +8,9 @@ const crypto = require("crypto");
 ///registering a user; 
 
 exports.registerUser = catchAsyncErrors(async(req,res,next)=>{
-    let {name,email,password,phoneNo,city,shgId,role} = req.body;
+    let {name,email,password,phoneNo,city,shgId,role,noOfMembers,aadharNumber} = req.body;
     let user = await User.create({
-        name,email,password,phoneNo,city,shgId,role,
+        name,email,password,phoneNo,city,shgId,role,noOfMembers,aadharNumber,
         avatar:{
             public_id : "This is a sample id",
             url : "sample_url"
@@ -210,6 +210,7 @@ exports.updateUserRole = catchAsyncErrors(async(req,res,next)=>{
    })
 })
 
+
 //delete user -- admin
 
 exports.deleteUser = catchAsyncErrors(async(req,res,next)=>{
@@ -219,7 +220,7 @@ exports.deleteUser = catchAsyncErrors(async(req,res,next)=>{
     }
 
     await user.remove();
-   res.status(200).json({
+    res.status(200).json({
     success:true,
     message:"User deleted successfully"
    })
@@ -274,20 +275,41 @@ exports.getSHGs = catchAsyncErrors(async(req,res,next)=>{
     res.status(200).json({
         success:true,
         users
-       })
+        })
 
    
 })
-
 exports.getSHGsByLocation = catchAsyncErrors(async(req,res,next)=>{
     // const user = await User.findById(req.params.city);
     const users = await User.find({"role":"shg-admin","city":req.params.city});
-
+    // console.log(this)
     res.status(200).json({
         success:true,
         users
        })
-
+// how to add self credentials
    
 })
+
+// exports.collabRequest = catchAsyncErrors(async(req,res,next)=>{
+//     // const targetSHG = {
+//     //     name : req.query.name,
+//     //     email : req.query.email,
+//     //     req.params.requested = !(req.params.requested)
+//     // }
+//     let user = await User.find({req.params.id});
+    
+//     await User.findByIdAndUpdate(req.params.id,targetSHG,{
+//         new:true,
+//         runValidators:true,
+        
+//         useFindAndModify:false
+//     })
+    
+//    res.status(200).json({
+//     success:true,
+//    })
+// })
+
+
 
